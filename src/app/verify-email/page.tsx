@@ -4,16 +4,17 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Container, Typography, CircularProgress, Box } from '@mui/material';
 import { verifyEmail } from '@/services/authService'; // Trigger verify-email
+import { Suspense } from 'react';
 
 const VerifyEmail = () => {
     const searchParams = useSearchParams();
-    const token = searchParams.get('token');
+    const verificationToken = searchParams.get('token');
     const [loading, setLoading] = useState(true);
     const [message, setMessage] = useState('');
 
     useEffect(() => {
-        if (token) {
-            verifyEmail(token)
+        if (verificationToken) {
+            verifyEmail({ token: verificationToken })
                 .then(() => {
                     setMessage('Your email has been successfully verified.');
                 })
@@ -27,14 +28,16 @@ const VerifyEmail = () => {
             setMessage('Invalid or missing verification token.');
             setLoading(false);
         }
-    }, [token]);
+    }, [verificationToken]);
 
     return (
-        <Container maxWidth="sm">
-            <Box mt={5} textAlign="center">
-                {loading ? <CircularProgress /> : <Typography variant="h5">{message}</Typography>}
-            </Box>
-        </Container>
+        <Suspense fallback={<CircularProgress />}>
+            <Container maxWidth="sm">
+                <Box mt={5} textAlign="center">
+                    {loading ? <CircularProgress /> : <Typography variant="h5">{message}</Typography>}
+                </Box>
+            </Container>
+        </Suspense>
     );
 };
 
