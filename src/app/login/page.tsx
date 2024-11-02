@@ -4,17 +4,21 @@ import { useState } from 'react';
 import { TextField, Button, Container, Typography, Box, Paper } from '@mui/material';
 import { useRouter } from 'next/navigation'
 import { login } from '@/services/authService';
+import { useUser } from '@/context/UserContext';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const router = useRouter();
+    const { setUser } = useUser();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await login({ email, password });
+            const userData = await login({ email, password });
+            setUser(userData);
+            localStorage.setItem('user', JSON.stringify(userData));
             router.push('/');
         } catch (error: any) {
             setError(error.message);

@@ -1,7 +1,9 @@
-// src/app/layout.tsx
+"use client";
+
 import { ReactNode } from 'react';
 import Head from 'next/head';
 import { CssBaseline, Container } from '@mui/material';
+import { UserProvider } from '../context/UserContext';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -14,10 +16,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </Head>
       <body>
         <CssBaseline />
-        <Container maxWidth="sm">
-          {/* You can add a Navbar here if you want */}
-          <main>{children}</main> {/* This is where the page content (login/register) will be rendered */}
-        </Container>
+        <UserProvider>
+          <Container maxWidth="sm">
+            {/* You can add a Navbar here if you want */}
+            <main>{children}</main> {/* This is where the page content (login/register) will be rendered */}
+          </Container>
+        </UserProvider>
       </body>
     </html>
   );
