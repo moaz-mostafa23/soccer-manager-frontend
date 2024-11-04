@@ -14,12 +14,14 @@ export const login = async (data: InputData) => {
             data,
             {
                 headers: {
-                    'Content-Type': 'application/json', // Allow everything temporarily by using application/json
+                    'Content-Type': 'application/json',
                 },
-                withCredentials: true, // Use this if you're sending credentials (like cookies)
+                withCredentials: true,
             }
         );
-        return response.data;
+        const token = response.data.user.token;
+        localStorage.setItem('jwtToken', token);
+        return response.data.user.user //TODO WTF is this lol
     } catch (error: any) {
         throw new Error(error.response?.data?.message || 'Login failed');
     }
