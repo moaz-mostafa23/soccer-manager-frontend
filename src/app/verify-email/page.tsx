@@ -1,16 +1,15 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Container, Typography, CircularProgress, Box } from '@mui/material';
-import { verifyEmail } from '@/services/authService'; // Trigger verify-email
-import { Suspense } from 'react';
+import { verifyEmail } from '@/services/authService';
 
 const VerifyEmail = () => {
-    const searchParams = useSearchParams();
-    const verificationToken = searchParams.get('token');
     const [loading, setLoading] = useState(true);
     const [message, setMessage] = useState('');
+    const searchParams = useSearchParams();
+    const verificationToken = searchParams?.get('token');
 
     useEffect(() => {
         if (verificationToken) {
@@ -31,14 +30,22 @@ const VerifyEmail = () => {
     }, [verificationToken]);
 
     return (
-        <Suspense fallback={<CircularProgress />}>
-            <Container maxWidth="sm">
-                <Box mt={5} textAlign="center">
-                    {loading ? <CircularProgress /> : <Typography variant="h5">{message}</Typography>}
-                </Box>
-            </Container>
-        </Suspense>
+        <Container maxWidth="sm">
+            <Box mt={5} textAlign="center">
+                {loading ? (
+                    <CircularProgress />
+                ) : (
+                    <Typography variant="h5">{message}</Typography>
+                )}
+            </Box>
+        </Container>
     );
 };
 
-export default VerifyEmail;
+const VerifyEmailWrapper = () => (
+    <Suspense fallback={<CircularProgress />}>
+        <VerifyEmail />
+    </Suspense>
+);
+
+export default VerifyEmailWrapper;
