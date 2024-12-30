@@ -1,24 +1,23 @@
 import axios from 'axios';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL!;
+
+const authApi = axios.create({
+    baseURL: API_URL,
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    withCredentials: true,
+});
+
 interface InputData {
     email: string;
     password: string;
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL!
-
 export const login = async (data: InputData) => {
     try {
-        const response = await axios.post(
-            `${API_URL}/api/users/login`,
-            data,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                withCredentials: true,
-            }
-        );
+        const response = await authApi.post('/api/users/login', data);
         const token = response.data.user.token;
         localStorage.setItem('jwtToken', token);
         return response.data.user.user;
@@ -29,16 +28,8 @@ export const login = async (data: InputData) => {
 
 export const register = async (data: InputData) => {
     try {
-        const response = await axios.post(
-            `${API_URL}/api/users/register`,
-            data,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                withCredentials: true,
-            }
-        );
+        const response = await authApi.post('/api/users/register', data);
+
         return response.data;
     } catch (error: any) {
         throw new Error(error.response?.data?.message || 'Registration failed');
@@ -47,16 +38,7 @@ export const register = async (data: InputData) => {
 
 export const verifyEmail = async (data: any) => {
     try {
-        const response = await axios.post(
-            `${API_URL}/api/users/verify-email`,
-            data,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                withCredentials: true,
-            }
-        );
+        const response = await authApi.post('/api/users/verify-email', data);
         return response.data;
     } catch (error: any) {
         throw new Error(error.response?.data?.message || 'Verification failed');
