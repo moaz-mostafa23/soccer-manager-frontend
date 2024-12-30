@@ -10,6 +10,7 @@ const VerifyEmail = () => {
     const [message, setMessage] = useState('');
     const searchParams = useSearchParams();
     const verificationToken = searchParams?.get('token');
+    console.log('reiefwfew');
 
     useEffect(() => {
         if (verificationToken) {
