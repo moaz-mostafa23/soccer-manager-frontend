@@ -6,6 +6,7 @@ import { CssBaseline, Container } from '@mui/material';
 import { UserProvider } from '../context/UserContext';
 
 export default function RootLayout({ children }: { children: ReactNode }) {
+
   return (
     <html lang="en">
       <Head>

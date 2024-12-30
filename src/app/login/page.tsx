@@ -1,17 +1,25 @@
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TextField, Button, Container, Typography, Box, Paper } from '@mui/material';
 import { useRouter } from 'next/navigation'
 import { login } from '@/services/authService';
 import { useUser } from '@/context/UserContext';
+import Link from 'next/link';
+
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const router = useRouter();
-    const { setUser } = useUser();
+    const { setUser, user } = useUser();
+
+    useEffect(() => {
+        if (user) {
+            router.push('/');
+        }
+    }, [user, router]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -67,6 +75,9 @@ const Login = () => {
                         </Button>
                     </Box>
                 </form>
+                <Typography variant="body2" align="center" sx={{ mt: 2 }}>
+                    New user? <Link href="/register">Sign up</Link>
+                </Typography>
             </Paper>
         </Container>
     );
